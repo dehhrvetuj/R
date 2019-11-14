@@ -1,0 +1,98 @@
+# install.packages("gapminder")
+# install.packages("tidyverse")
+# install.packages("sf")
+library(tidyverse)
+library(gapminder)
+
+ggplot(data=gapminder)  + geom_jitter(mapping= aes(x=log(gdpPercap),  y=lifeExp, color = year, size = pop, shape = continent))
+ggplot(data=gapminder)  + 
+  geom_point(mapping= aes(x=log(gdpPercap),  y=lifeExp,size = pop), color="purple")
+
+ggplot(data=gapminder)  + 
+  geom_line(mapping= aes(x=year,  y=lifeExp, color=continent, group=country))
+
+
+ggplot(data=gapminder)  + 
+  geom_boxplot(mapping= aes(x=continent,  y=lifeExp)) + 
+  geom_jitter(mapping= aes(x=continent,  y=lifeExp))
+           
+ggplot(data=gapminder)  + 
+  geom_jitter(mapping= aes(x=continent,  y=lifeExp, color=continent)) +
+  geom_boxplot(mapping= aes(x=continent,  y=lifeExp,color=continent))  
+
+
+
+ggplot(gapminder, mapping=aes(x=log(gdpPercap), y=lifeExp, color=continent)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+
+ggplot(data=gapminder, mapping = aes(x=log(gdpPercap), y=lifeExp)) + geom_smooth(method="lm") +
+  geom_point(aes(color=continent,alpha=0.5))
+
+
+## fixing the scale
+ggplot(data = gapminder, mapping = aes(x = gdpPercap, y = lifeExp, color=continent)) +
+  geom_point() +
+  geom_smooth() +
+  scale_x_log10()
+
+
+## boxplot of life expectency per year
+ggplot(data = gapminder, mapping = aes(x = year, y = lifeExp, group = year)) +
+  geom_boxplot()
+
+
+## gdp per year
+ggplot(data = gapminder, mapping = aes(x = year, y = gdpPercap, group = year)) +
+  geom_boxplot() +
+  scale_y_log10()
+
+
+
+ggplot(gapminder, mapping=aes(x=gdpPercap,fill=continent,color=continent))+
+  geom_density(alpha=0.1) + 
+  scale_x_log10()
+
+ggplot(data = gapminder, mapping = aes(x = gdpPercap, y = lifeExp)) +
+  geom_point() + 
+  geom_smooth(method="lm") + 
+  scale_x_log10() + 
+  facet_wrap(vars(continent))
+
+
+ggplot(data = gapminder, mapping = aes(x = gdpPercap, y = lifeExp,color=continent)) +
+  geom_point() + 
+  geom_smooth(method="lm") + 
+  scale_x_log10() + 
+  facet_wrap(vars(year))
+
+ggplot(data=filter(gapminder,year==2007,continent=="Asia"))
+
+filter(gapminder,year==2007,continent=="Asia")
+
+
+ggplot(data=filter(gapminder,year==2007,continent=="Asia")) + 
+  geom_col(mapping = aes(x=country,y=pop)) + coord_flip()
+
+
+# install.packages("gifski")
+# install.packages("gganimate")
+# install.packages("png")
+library(gganimate)
+
+
+ggplot(data = gapminder, mapping = aes(x = gdpPercap/1e3, y = lifeExp,color=continent,size=pop/1e6)) +
+  geom_point(alpha=1) + 
+  scale_x_log10() + 
+  facet_wrap(vars(continent)) + 
+  labs(title="Life Expectancy vs GDP per Capita over time in",
+       subtitle="In the past 100 years, life expectancy has improved",
+       caption="Sources: Gapminder foundation www.gapminder.org",
+    x="GDP per Capita, x1000 USD",y="Life Expectancy", size="Population, mln",color="Continent") +
+  
+transition_time(year)
+
+# ggsave("img/pulication_plot.png")
+anim_save("img/animation.gif", width=8,height=9)
+
